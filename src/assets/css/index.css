@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+html,body{
+    height: 100vh;
+    width: 100vw;
+}
+.l5{
+    margin-left: 5px;
+}
+/* :deep(.el-icon svg){
+    width: 2em;
+    height: 2em;
+} */
