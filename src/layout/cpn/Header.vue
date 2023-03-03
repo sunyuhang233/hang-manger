@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import Breadcrumb from './Breadcrumb.vue';
+import { ref } from 'vue';
+import { Expand, Fold } from '@element-plus/icons-vue';
+import router from '@/router';
+import { clearCache } from '@/utils/cache';
 function goToInfo() {
     console.log('goToInfo');
 }
@@ -7,15 +12,31 @@ function edithPassword() {
     console.log('edithPassword');
 }
 
-function quit() {
-    console.log('quit');
-}
+const quit = () => {
+    clearCache();
+    router.push('/login');
+};
+
+const isFold = ref(false);
+
+const emit = defineEmits(['iconChange']);
+
+const iconChange = () => {
+    isFold.value = !isFold.value;
+    console.log(isFold.value);
+    emit('iconChange', isFold.value);
+};
 </script>
 
 <template>
     <div class="header">
         <el-col :span="6" class="left">
-            <el-icon class="fontSize"><Fold /></el-icon>
+            <div class="content">
+                <el-icon class="fontSize">
+                    <component :is="isFold ? 'Expand' : 'Fold'" @click="iconChange" />
+                </el-icon>
+                <Breadcrumb />
+            </div>
         </el-col>
         <el-col :span="18" class="right">
             <el-dropdown>
@@ -24,15 +45,12 @@ function quit() {
                         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
                     />
                     <span class="name">阿航</span>
-                    <el-icon class="el-icon--right">
-                        <arrow-down />
-                    </el-icon>
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item @click="goToInfo">个人信息</el-dropdown-item>
-                        <el-dropdown-item @click="edithPassword">修改密码</el-dropdown-item>
-                        <el-dropdown-item @click="quit">退出登录</el-dropdown-item>
+                        <el-dropdown-item>个人信息</el-dropdown-item>
+                        <el-dropdown-item>修改密码</el-dropdown-item>
+                        <el-dropdown-item>退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -43,7 +61,7 @@ function quit() {
 <style lang="scss" scoped>
 .header {
     height: 60px;
-    background-color: skyblue;
+    background-color: #fff;
     color: #fff;
     display: flex;
     align-items: center;
@@ -51,8 +69,15 @@ function quit() {
         display: flex;
         align-items: center;
         padding-left: 40px;
+        cursor: pointer;
         .fontSize {
             font-size: 24px;
+            color: #000;
+            margin-right: 10px;
+        }
+        .content {
+            display: flex;
+            align-items: center;
         }
     }
     .right {
