@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Content from './cpn/Content.vue';
 import Search from './cpn/Search.vue';
+import Model from './cpn/Model.vue';
 
 const ContentRef = ref<InstanceType<typeof Content>>();
 
@@ -13,6 +14,17 @@ const handleSubmit = (form: any) => {
 const handleReset = () => {
     ContentRef.value?.fetchTableData();
 };
+
+// 模态框
+const ModelRef = ref<InstanceType<typeof Model>>();
+
+const handleAdd = () => {
+    ModelRef.value?.setModelVisible();
+};
+
+const handleEdit = (row: any) => {
+    ModelRef.value?.setModelVisible(false,row);
+};
 </script>
 
 <template>
@@ -21,7 +33,8 @@ const handleReset = () => {
             <Search @submit="handleSubmit" @reset="handleReset" />
         </div>
         <div class="content">
-            <Content ref="ContentRef" />
+            <Content ref="ContentRef" @addItem="handleAdd" @editItem="handleEdit"/>
+            <Model ref="ModelRef" />
         </div>
     </div>
 </template>

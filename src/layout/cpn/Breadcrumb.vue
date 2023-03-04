@@ -8,13 +8,19 @@ const route = useRoute();
 function mapPathToBreadcrumbs(path: string, userMenus: any[]) {
     const breadcrumbs = [];
     for (let menu of userMenus) {
-        for (const menuChild of menu.children) {
-            if (menuChild.path === path) {
-                breadcrumbs.push({ name: menu.name });
-                breadcrumbs.push({ name: menuChild.name, path: menuChild.path });
+        if (menu.path === path) {
+            breadcrumbs.push({ name: menu.name, path: menu.path });
+        } else {
+            for (const menuChild of menu.children) {
+                if (menuChild.path === path) {
+                    breadcrumbs.push({ name: menu.name });
+                    breadcrumbs.push({ name: menuChild.name, path: menuChild.path });
+                }
             }
         }
     }
+    console.log(breadcrumbs);
+
     return breadcrumbs;
 }
 const breadcrumbs = computed(() => {
