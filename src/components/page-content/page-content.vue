@@ -3,48 +3,49 @@ import { ref } from 'vue';
 import { Delete, Edit } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
+interface Iprops {
+    contentConfig: {
+        herder: {
+            title: string;
+            btnText: string;
+        };
+        propList: any[];
+    };
+}
+const props = defineProps<Iprops>();
+
 const tableData = [
     {
         id: 1,
         date: '2016-05-03',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles',
+        createAt: '2021-05-03 12:00:00',
+        updateAt: '2021-05-03 12:00:00',
     },
     {
         id: 2,
         date: '2016-05-02',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles',
+        createAt: '2021-05-03 12:00:00',
+        updateAt: '2021-05-03 12:00:00',
     },
     {
         id: 3,
         date: '2016-05-04',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles',
+        createAt: '2021-05-03 12:00:00',
+        updateAt: '2021-05-03 12:00:00',
     },
     {
         id: 4,
         date: '2016-05-01',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 4,
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 4,
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 4,
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
+        createAt: '2021-05-03 12:00:00',
+        updateAt: '2021-05-03 12:00:00',
     },
 ];
 
@@ -108,32 +109,57 @@ defineExpose({
 <template>
     <div class="content">
         <div class="header">
-            <h3>用户列表</h3>
-            <el-button type="primary" @click="handleAddBtn">新建用户</el-button>
+            <h3>{{ contentConfig.herder.title }}</h3>
+            <el-button type="primary" @click="handleAddBtn">
+                {{ contentConfig.herder.btnText }}
+            </el-button>
         </div>
         <div class="table">
             <el-table :data="tableData" stripe border style="width: 100%">
-                <el-table-column type="selection" width="50" />
-                <el-table-column label="序号" type="index" width="60" />
-                <el-table-column prop="date" label="Date" align="center" />
-                <el-table-column prop="name" label="Name" align="center" />
-                <el-table-column prop="address" label="Address" align="center" />
-                <el-table-column label="操作" align="center">
-                    <template #default="scope">
-                        <el-button size="small" :icon="Edit" text @click="handleEditBtn(scope.row)">
-                            编辑
-                        </el-button>
-                        <el-button
-                            type="danger"
-                            size="small"
-                            :icon="Delete"
-                            text
-                            @click="handleDeleteBtn(scope.row.id)"
-                        >
-                            删除
-                        </el-button>
+                <template v-for="item in contentConfig.propList" :key="item.prop">
+                    <!-- 如果类型是timer 格式化时间 -->
+                    <template v-if="item.type === 'timer'">
+                        <el-table-column v-bind="item" align="center">
+                            <template #default="scope">
+                                <span>{{ scope.row[item.prop] }}</span>
+                            </template>
+                        </el-table-column>
                     </template>
-                </el-table-column>
+                    <!-- 操作 -->
+                    <template v-else-if="item.type === 'handle'">
+                        <el-table-column align="center" v-bind="item">
+                            <template #default="scope">
+                                <el-button
+                                    size="small"
+                                    :icon="Edit"
+                                    text
+                                    @click="handleEditBtn(scope.row)"
+                                >
+                                    编辑
+                                </el-button>
+                                <el-button
+                                    type="danger"
+                                    size="small"
+                                    :icon="Delete"
+                                    text
+                                    @click="handleDeleteBtn(scope.row.id)"
+                                >
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </template>
+                    <!-- 自定义类型 -->
+                    <template v-else-if="item.type === 'custom'">
+                        <el-table-column align="center" v-bind="item">
+                            <template #default="scope">
+                                <slot :name="item.slotName" v-bind="scope"></slot>
+                            </template>
+                        </el-table-column>
+                    </template>
+                    <!-- 普通类型 -->
+                    <el-table-column v-else v-bind="item" align="center" />
+                </template>
             </el-table>
         </div>
         <div class="pagination">
@@ -164,6 +190,9 @@ defineExpose({
             font-size: 20px;
             font-weight: 400;
         }
+    }
+    .table {
+        margin-top: 16px;
     }
     .pagination {
         display: flex;

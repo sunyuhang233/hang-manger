@@ -28,24 +28,6 @@ const tableData = [
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles',
     },
-    {
-        id: 4,
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 4,
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 4,
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
 ];
 
 const currentPage4 = ref(1);

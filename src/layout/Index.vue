@@ -22,7 +22,7 @@ const handleChange = (isAside: boolean) => {
                 </el-header>
                 <el-main class="main">
                     <Transition>
-                        <router-view class="view" />
+                        <router-view />
                     </Transition>
                 </el-main>
             </el-container>
@@ -52,13 +52,13 @@ const handleChange = (isAside: boolean) => {
 
 .main {
     height: calc(100vh - 60px);
-    overflow: auto;
     background-color: #ececee;
+    border-radius: 6px;
+    overflow: auto;
 }
 .view {
     height: 100%;
     width: 100%;
-    border-radius: 4px;
 }
 .el-main {
     padding: 5px;

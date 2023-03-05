@@ -42,6 +42,5 @@ const handleEdit = (row: any) => {
 <style scoped lang="scss">
 .list {
     overflow: hidden;
-    border-radius: 20px;
 }
 </style>
